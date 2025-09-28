@@ -7,6 +7,11 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://crosspay-front.vercel.app'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // si necesitas enviar cookies
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
