@@ -11,6 +11,7 @@ const typeOrmConfig: TypeOrmModuleOptions = {
   },
   autoLoadEntities: true,
   synchronize: true, // solo en dev
+  dropSchema:true
 };
 
 export default typeOrmConfig;
