@@ -4,7 +4,7 @@ import { Transaction } from 'src/transactions/entity/transaction.entity';
 import { Repository } from 'typeorm';
 
 export class TransactionResponseDto {
-  id: number;
+  id: string;
   currency: string;
   amount: number;
   description: string;
@@ -21,18 +21,29 @@ export class AdminService {
   ) {}
 
   // Listar todas las transacciones
-   async listTransactions(): Promise<TransactionResponseDto[]> {
-    const transactions = await this.transactionRepo.find();
+async listTransactions(
+  page: number,
+  limit: number,
 
-    return transactions.map(t => ({
-      id: t.id,
-      currency: t.currency,
-      amount: t.amount,
-      description: t.description,
-      name: t.name,
-      documentType: t.documentType,
-      createdAt: t.createdAt.toISOString(),
-    }));
-  }
+): Promise<TransactionResponseDto[]> {
+  const skip = (page - 1) * limit; 
+  const take = limit;
+
+  const transactions = await this.transactionRepo.find({
+    skip,
+    take,
+    order: { createdAt: 'DESC' },
+  });
+
+  return transactions.map(t => ({
+    id: t.id,
+    currency: t.currency,
+    amount: t.amount,
+    description: t.description,
+    name: t.name,
+    documentType: t.documentType,
+    createdAt: t.createdAt.toISOString(),
+  }));
+}
 }
 
